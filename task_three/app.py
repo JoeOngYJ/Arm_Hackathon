@@ -18,7 +18,10 @@ class Stock():
     
     def fetch_purchase_price(self):
         stock = yf.Ticker(self.ticker)
-        purchase_date = datetime.strptime(self.purchase_date.strip(), '%Y-%m-%d')
+        if isinstance(self.purchase_date, str):
+            purchase_date = datetime.strptime(self.purchase_date.strip(), '%Y-%m-%d %H:%M:%S')
+        else:
+            purchase_date = self.purchase_date
         historical_data = stock.history(start=purchase_date)
         purchase_price = historical_data['Close'].iloc[0]
         self.purchase_price = float(purchase_price)
@@ -65,8 +68,13 @@ def calculate():
     symbol = request.form['symbol'].upper()
     amount_spent = request.form['amount_spent']
     date_bought = request.form['date_bought']
+    time_bought = request.form['time_bought']
 
-    stock = Stock(symbol, 'user', amount_spent, date_bought)
+    datetime_bought = datetime.strptime(f"{date_bought} {time_bought}", '%Y-%m-%d %H:%M')
+    time_bought = f"{time_bought}:00"
+    datetime_bought = datetime.strptime(f"{date_bought} {time_bought}", '%Y-%m-%d %H:%M:%S')
+    print('----------i',datetime_bought )
+    stock = Stock(symbol, 'user', amount_spent, datetime_bought)
     unit, purchase_price, purchase_date, ticker, current_price, unit, amount_spent, current_value, gain_loss_percentage, gain_loss_dollar = stock.process()
 
     return jsonify({
