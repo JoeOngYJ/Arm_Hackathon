@@ -1,6 +1,7 @@
 #include <cstdint>
 #include <fstream>
 #include <iostream>
+#include <queue>
 #include <unordered_set>
 #include <vector>
 
@@ -26,18 +27,6 @@ inline int getX(int idx, int width) {
 
 inline int getY(int idx, int width) {
     return idx / width;
-}
-
-int getMinFCostIdx(std::vector<int> &open, std::vector<Cell> &cells) {
-    int minIdx = 0;
-    uint32_t minValue = cells[0].fCost;
-    for (int i = 1; i < cells.size(); ++i) {
-        if (cells[i].fCost < minValue) {
-            minIdx = i;
-            minValue = cells[i].fCost;
-        }
-    }
-    return minIdx;
 }
 
 inline uint32_t manhattanDistance(int x1, int y1, int x2, int y2) {
@@ -73,23 +62,25 @@ int main(int argc, const char** argv) {
 
     int target_idx = width * height - 1;
 
-    auto open = std::vector<int>();
+    auto compare = [&cells](int &a, int &b) {
+        return cells[a].fCost < cells[b].fCost;
+    };
+    std::priority_queue<int, std::vector<int>, decltype(compare)> open(compare);
     auto open_set = std::unordered_set<int>();
     auto closed = std::unordered_set<int>();
 
     // Pathfinding
     cells[0].gCost = costs[0];
     cells[0].fCost = cells[0].gCost + cells[0].hCost;
-    open.push_back(0);
+    open.push(0);
     open_set.insert(0);
 
     while (!open.empty()) {
-        const int currOpenIdx = getMinFCostIdx(open, cells);
-        const Cell curr = cells[open[currOpenIdx]];
+        const Cell curr = cells[open.top()];
 
         if (curr.idx == target_idx) break;
 
-        open.erase(open.begin() + currOpenIdx);
+        open.pop();
         open_set.erase(curr.idx);
 
         closed.insert(curr.idx);
@@ -107,7 +98,7 @@ int main(int argc, const char** argv) {
                 cells[left_idx].fCost = cells[left_idx].gCost + cells[left_idx].hCost;
 
                 if (!open_set.contains(left_idx)) {
-                    open.push_back(left_idx);
+                    open.push(left_idx);
                     open_set.insert(left_idx);
                 }
             }
@@ -121,7 +112,7 @@ int main(int argc, const char** argv) {
                 cells[right_idx].fCost = cells[right_idx].gCost + cells[right_idx].hCost;
 
                 if (!open_set.contains(right_idx)) {
-                    open.push_back(right_idx);
+                    open.push(right_idx);
                     open_set.insert(right_idx);
                 }
             }
@@ -134,7 +125,7 @@ int main(int argc, const char** argv) {
                 cells[up_idx].fCost = cells[up_idx].gCost + cells[up_idx].hCost;
 
                 if (!open_set.contains(up_idx)) {
-                    open.push_back(up_idx);
+                    open.push(up_idx);
                     open_set.insert(up_idx);
                 }
             }
@@ -148,7 +139,7 @@ int main(int argc, const char** argv) {
                 cells[down_idx].fCost = cells[down_idx].gCost + cells[down_idx].hCost;
 
                 if (!open_set.contains(down_idx)) {
-                    open.push_back(down_idx);
+                    open.push(down_idx);
                     open_set.insert(down_idx);
                 }
             }
