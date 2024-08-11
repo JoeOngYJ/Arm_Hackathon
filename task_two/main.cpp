@@ -5,6 +5,8 @@
 #include <queue>
 #include <vector>
 
+// We are using A* for pathfinding
+
 // Maximum 32 bit value
 #define MAX_UINT32 4294967295
 
@@ -52,7 +54,7 @@ int main(int argc, const char** argv) {
     }
 
     // Initialization
-    auto cells = std::make_unique<Cell[]>(width * height);
+    const auto cells = std::make_unique<Cell[]>(width * height);
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
             int idx = getIdx(x, y, width);
@@ -62,9 +64,9 @@ int main(int argc, const char** argv) {
         }
     }
 
-    int target_idx = width * height - 1;
+    const int target_idx = width * height - 1;
 
-    auto compare = [&cells](int &a, int &b) { return cells[a].fCost > cells[b].fCost; };
+    const auto compare = [&cells](int &a, int &b) { return cells[a].fCost > cells[b].fCost; };
     std::priority_queue<int, std::vector<int>, decltype(compare)> open(compare);
 
     // Pathfinding
@@ -76,10 +78,12 @@ int main(int argc, const char** argv) {
     while (!open.empty()) {
         const Cell curr = cells[open.top()];
 
-        if (curr.idx == target_idx) break;
+        if (curr.idx == target_idx) break; // We are at the target
 
+        // Remove from queue
         open.pop();
 
+        // Closed
         cells[0].flag = 2;
 
         const int right_idx = curr.idx + 1;
@@ -87,8 +91,9 @@ int main(int argc, const char** argv) {
         const int up_idx = curr.idx - width;
         const int down_idx = curr.idx + width;
 
+        // Check each neighbouring direction
         if (curr.x > 0 && cells[left_idx].flag != 2) {
-            uint_fast32_t newGCost = curr.gCost + costs[left_idx];
+            const uint_fast32_t newGCost = curr.gCost + costs[left_idx];
             if (newGCost < cells[left_idx].gCost) {
                 cells[left_idx].gCost = newGCost;
                 cells[left_idx].hCost = manhattanDistance(curr.x - 1, curr.y, width - 1, height - 1);
@@ -101,7 +106,7 @@ int main(int argc, const char** argv) {
             }
         }
         if (curr.x < width - 1 && cells[right_idx].flag != 2) {
-            uint_fast32_t newGCost = curr.gCost + costs[right_idx];
+            const uint_fast32_t newGCost = curr.gCost + costs[right_idx];
             if (newGCost < cells[right_idx].gCost) {
                 cells[right_idx].gCost = newGCost;
                 cells[right_idx].hCost = manhattanDistance(curr.x + 1, curr.y, width - 1, height - 1);
@@ -114,7 +119,7 @@ int main(int argc, const char** argv) {
             }
         }
         if (curr.y > 0 && cells[up_idx].flag != 2) {
-            uint_fast32_t newGCost = curr.gCost + costs[up_idx];
+            const uint_fast32_t newGCost = curr.gCost + costs[up_idx];
             if (newGCost < cells[up_idx].gCost) {
                 cells[up_idx].gCost = newGCost;
                 cells[up_idx].hCost = manhattanDistance(curr.x, curr.y - 1, width - 1, height - 1);
@@ -127,7 +132,7 @@ int main(int argc, const char** argv) {
             }
         }
         if (curr.y < height - 1 && cells[down_idx].flag != 2) {
-            uint_fast32_t newGCost = curr.gCost + costs[down_idx];
+            const uint_fast32_t newGCost = curr.gCost + costs[down_idx];
             if (newGCost < cells[down_idx].gCost) {
                 cells[down_idx].gCost = newGCost;
                 cells[down_idx].hCost = manhattanDistance(curr.x, curr.y + 1, width - 1, height - 1);
@@ -142,6 +147,8 @@ int main(int argc, const char** argv) {
     }
 
     std::cout << cells[target_idx].fCost << std::endl;
+
+    // We don't need to deallocate memory, as the OS will do that for us when the program ends
 
     return 0;
 }
