@@ -10,8 +10,6 @@
 typedef unsigned long       DWORD;
 typedef unsigned long       ULONG;
 typedef long long			SIZE_T;
-typedef unsigned __int64 ULONG64, * PULONG64;
-typedef unsigned __int64 DWORD64, * PDWORD64;
 typedef int                 BOOL;
 typedef unsigned char       BYTE;
 typedef unsigned short      WORD;
