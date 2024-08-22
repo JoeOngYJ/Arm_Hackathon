@@ -1,50 +1,56 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    background-color: #f7f7f7;
     margin: 0;
     padding: 0;
 }
 
 .container {
-    max-width: 600px;
+    max-width: 800px;
     margin: 50px auto;
     background-color: white;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
 }
 
 h1 {
     text-align: center;
     color: #333;
+    margin-bottom: 30px;
 }
 
 h2 {
     text-align: left;
     color: #333;
+    margin-top: 40px;
 }
 
 label {
     display: block;
     margin-top: 15px;
+    font-weight: bold;
 }
 
 input[type="text"], input[type="number"], input[type="date"] {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     margin-top: 5px;
-    border-radius: 4px;
+    border-radius: 5px;
     border: 1px solid #ccc;
+    font-size: 16px;
+    box-sizing: border-box;
 }
 
 button {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     background-color: #28a745;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     margin-top: 20px;
+    font-size: 16px;
     cursor: pointer;
 }
 
@@ -52,34 +58,40 @@ button:hover {
     background-color: #218838;
 }
 
-#portfolio-table, #total-result-table {
+#portfolio-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
 }
 
-#portfolio-table th, #portfolio-table td,
-#total-result-table th, #total-result-table td {
-    border: 1px solid #ccc;
-    padding: 10px;
+#portfolio-table th, #portfolio-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
     text-align: center;
+    font-size: 14px;
 }
 
 #portfolio-table th {
-    background-color: #f9f9f9;
+    background-color: #f2f2f2;
     font-weight: bold;
-}
-
-#total-result-table th {
-    background-color: #f9f9f9;
-    font-weight: bold;
-    text-align: right;
-    padding-right: 20px;
 }
 
 #total-profit-loss {
     font-weight: bold;
     color: #333;
-    text-align: left;
-    padding-left: 20px;
+    text-align: right;
+    margin-top: 20px;
+    font-size: 18px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+#clear-portfolio {
+    background-color: #dc3545;
+    margin-top: 20px;
+}
+
+#clear-portfolio:hover {
+    background-color: #c82333;
 }
