@@ -4,13 +4,14 @@ document.getElementById('investment-form').addEventListener('submit', function (
     const symbol = document.getElementById('symbol').value.toUpperCase();
     const amountSpent = document.getElementById('amount_spent').value;
     const dateBought = document.getElementById('date_bought').value;
+    const timeBought = document.getElementById('time_bought').value;
 
     fetch('/calculate', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: `symbol=${symbol}&amount_spent=${amountSpent}&date_bought=${dateBought}`,
+        body: `symbol=${symbol}&amount_spent=${amountSpent}&date_bought=${dateBought}&time_bought=${timeBought}`,
     })
     .then(response => response.json())
     .then(data => {
@@ -45,9 +46,9 @@ function addStockToPortfolio(ticker, purchasePrice, purchaseDate, currentPrice, 
         <td>${ticker}</td>
         <td>${units}</td>
         <td>$${amountSpent}</td>
+        <td>$${currentValue.toFixed(2)}</td>
         <td>$${currentPrice.toFixed(2)}</td>
         <td>$${purchasePrice.toFixed(2)}</td>
-        <td>$${currentValue.toFixed(2)}</td>
         <td>${gainLossPercentage.toFixed(2)}%</td>
         <td>$${gainLossDollar.toFixed(2)}</td>
     `;
