@@ -1,4 +1,5 @@
 #include "includes.h"
+#include <cstring>
 #define _CRT_SECURE_NO_WARNINGS
 
 void remove_newlines(char* str);
@@ -7,14 +8,13 @@ const char* remove_newlines(const char* input);
 bool isCd(const char* line);
 void cdCommand(std::string& currentDirectory, const char* command);
 int countSlashes(const std::string& path);
-char* combineStrings(const char* str1, const char* str2);
 CD_ITEM checkCd(const char* line);
 FILE_DETAIL fileDetails[1024] = {};
 
-int main() 
+int main()
 {
 	//std::cout << "starting..." << std::endl;
-	std::vector<std::string> data; 
+	std::vector<std::string> data;
 	getFileContent2(&data);
 	char* currPath = NULL;
 	int dataSize = (int)data.size();
@@ -50,21 +50,20 @@ int main()
 				//std::cout << deepest_file_name << std::endl;
 				deepest_depth = depth;
 				deepest_file_dir = currentDirectory;
-				
+
 			}
 			file_count++;
 			total_depth += depth;
-		}	
+		}
 	}
 	float average_depth = total_depth / dataSize;
 	std::cout << file_count << ",'" << deepest_file_dir << "/";
-	deepest_file_name.erase(std::remove(deepest_file_name.begin(), deepest_file_name.end(), '\r'), deepest_file_name.end());
 	std::cout << deepest_file_name << "'," << std::to_string(average_depth);
 
-	std::cin.get(); //DELETE
+	//std::cin.get(); //DELETE
 }
 
-int countSlashes(const std::string& path) 
+int countSlashes(const std::string& path)
 {
 	int slashCount = 0;
 	for (char ch : path) {
@@ -100,16 +99,7 @@ bool isCd(const char* line)
 	return false;
 }
 
-
-char* combineStrings(const char* str1, const char* str2) 
-{
-	size_t length = strlen(str1) + strlen(str2) + 1;
-	char* combined = new char[length];
-	strcpy_s(combined, length, str1);
-	strcat_s(combined, length, str2);
-	return combined;
-}
-const char* remove_newlines(const char* input) 
+const char* remove_newlines(const char* input)
 {
 	if (input == NULL) {
 		return NULL;
@@ -128,17 +118,17 @@ const char* remove_newlines(const char* input)
 	*dst = '\0';
 	return result;
 }
-void append_string(char** str, const char* addition) 
+void append_string(char** str, const char* addition)
 {
 	size_t len = *str ? strlen(*str) : 0;
 	size_t addition_len = strlen(addition);
 	*str = (char*)realloc(*str, len + addition_len + 1);
 	if (*str == NULL)
 		return;
-	strcpy_s(*str + len, addition_len + 1, addition);
+	strcpy(*str + len, addition);
 }
 
-void cdCommand(std::string& currentDirectory, const char* command) 
+void cdCommand(std::string& currentDirectory, const char* command)
 {
 	std::string commandStr(command);
 	std::istringstream ss(commandStr);
