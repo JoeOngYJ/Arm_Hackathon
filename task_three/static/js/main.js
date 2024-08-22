@@ -2,7 +2,7 @@ document.getElementById('investment-form').addEventListener('submit', function (
     e.preventDefault();
 
     const symbol = document.getElementById('symbol').value.toUpperCase();
-    const amountSpent = parseFloat(document.getElementById('amount_spent').value);
+    const amountSpent = document.getElementById('amount_spent').value;
     const dateBought = document.getElementById('date_bought').value;
 
     fetch('/calculate', {
@@ -15,7 +15,18 @@ document.getElementById('investment-form').addEventListener('submit', function (
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            fetchCurrentPriceAndAddToPortfolio(symbol, amountSpent, dateBought, data.amount_gained);
+            addStockToPortfolio(
+                data.ticker,
+                data.purchase_price,
+                data.purchase_date,
+                data.current_price,
+                data.unit,
+                data.amount_spent,
+                data.current_value,
+                data.gain_loss_percentage,
+                data.gain_loss_dollar
+            );
+            updateTotalProfitLoss();
         } else {
             alert(`Error: ${data.error}`);
         }
@@ -25,41 +36,22 @@ document.getElementById('investment-form').addEventListener('submit', function (
     });
 });
 
-let totalProfitOrLoss = 0;
-
-function fetchCurrentPriceAndAddToPortfolio(symbol, amountSpent, dateBought, profitOrLoss) {
-    fetch(`/current-price?symbol=${symbol}`)
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            const currentPrice = data.current_price;
-            const amountGained = currentPrice - amountSpent;
-            totalProfitOrLoss += amountGained;
-
-            addStockToPortfolio(symbol, amountSpent, dateBought, currentPrice, amountGained);
-            updateTotalProfitLoss();
-        } else {
-            alert(`Error: ${data.error}`);
-        }
-    })
-    .catch(error => {
-        alert('Error fetching current price.');
-    });
-}
-
-function addStockToPortfolio(symbol, amountSpent, dateBought, currentPrice, profitOrLoss) {
+function addStockToPortfolio(ticker, purchasePrice, purchaseDate, currentPrice, units, amountSpent, currentValue, gainLossPercentage, gainLossDollar) {
     const portfolioTable = document.getElementById('portfolio-table').getElementsByTagName('tbody')[0];
     const newRow = portfolioTable.insertRow();
 
     newRow.innerHTML = `
-        <td>${symbol}</td>
-        <td>$${amountSpent.toFixed(2)}</td>
-        <td>${dateBought}</td>
+        <td>${purchaseDate}</td>
+        <td>${ticker}</td>
+        <td>${units}</td>
+        <td>$${amountSpent}</td>
         <td>$${currentPrice.toFixed(2)}</td>
-        <td>$${profitOrLoss.toFixed(2)}</td>
+        <td>$${purchasePrice.toFixed(2)}</td>
+        <td>$${currentValue.toFixed(2)}</td>
+        <td>${gainLossPercentage.toFixed(2)}%</td>
+        <td>$${gainLossDollar.toFixed(2)}</td>
     `;
 }
-
 function updateTotalProfitLoss() {
     document.getElementById('total-profit-loss').innerText = `Total Profit/Loss: $${totalProfitOrLoss.toFixed(2)}`;
 }
