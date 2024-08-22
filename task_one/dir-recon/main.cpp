@@ -57,7 +57,10 @@ int main()
 		}	
 	}
 	float average_depth = total_depth / dataSize;
-	std::cout << file_count << ",'" << deepest_file_dir << "/"  << "'," << average_depth << std::endl;
+	std::cout << file_count << ",'" << deepest_file_dir << "/";
+	deepest_file_name.erase(std::remove(deepest_file_name.begin(), deepest_file_name.end(), '\r'), deepest_file_name.end());
+	std::cout << deepest_file_name << "'," << std::to_string(average_depth);
+
 	std::cin.get(); //DELETE
 }
 
