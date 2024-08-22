@@ -12,6 +12,8 @@ To run:
 ```
 Replace 'test.txt' with the input file. Make sure there is no trailing whitespace/newlines
 
+If using hyperfine, make sure to have a large warmup (ideally at least a few hundred) as well as specifying the `--shell=none` option as otherwise printing to stdout can cause significant performance variation.
+
 ## Task Two
 Requires g++ with support for c++20.
 Run the following command inside of the task_two directory to compile:
