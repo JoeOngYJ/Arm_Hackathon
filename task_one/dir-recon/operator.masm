@@ -1,0 +1,18 @@
+.DATA
+.CODE
+PUBLIC isCommand
+
+isCommand PROC
+    mov rax, rcx
+    mov al, byte ptr [rax]
+    cmp al, '$'
+    je is_true
+    xor al, al
+    ret
+
+is_true:
+    mov al, 1
+    ret
+isCommand ENDP
+
+END
