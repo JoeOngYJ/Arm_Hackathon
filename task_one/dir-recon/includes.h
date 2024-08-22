@@ -30,6 +30,7 @@ typedef struct CD_ITEM
 
 typedef struct FILE_DETAIL
 {
-	const char* file_name;
-	const char* file_dir;
+	std::string file_name;
+	std::string dir;
+	int dir_depth;
 };
