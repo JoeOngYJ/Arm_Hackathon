@@ -21,3 +21,15 @@ typedef void*				PVOID;
 void getFileContent(char** pBuffer, SIZE_T* size);
 void getFileContent2(std::vector<std::string>* pData);
 extern "C" bool isCommand(const char* line);
+
+typedef struct CD_ITEM
+{
+	bool isCd;
+	const char* dir;
+};
+
+typedef struct FILE_DETAIL
+{
+	const char* file_name;
+	const char* file_dir;
+};
