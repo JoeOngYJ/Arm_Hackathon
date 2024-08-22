@@ -52,10 +52,29 @@ function addStockToPortfolio(ticker, purchasePrice, purchaseDate, currentPrice, 
         <td>$${gainLossDollar.toFixed(2)}</td>
     `;
 }
+// function updateTotalProfitLoss() {
+//     document.getElementById('total-profit-loss').innerText = `Total Profit/Loss: $${totalProfitOrLoss.toFixed(2)}`;
+// }
+
 function updateTotalProfitLoss() {
+    let totalProfitOrLoss = 0;
+
+    // Get the portfolio table body
+    const portfolioTableBody = document.getElementById('portfolio-table').getElementsByTagName('tbody')[0];
+
+    // Loop through all rows in the table body
+    for (let i = 0; i < portfolioTableBody.rows.length; i++) {
+        // Get the Gain/Loss ($) value from the last column (index 8)
+        const gainLossCell = portfolioTableBody.rows[i].cells[8];
+        const gainLossValue = parseFloat(gainLossCell.innerText.replace('$', ''));
+
+        // Add the gain/loss value to the totalProfitOrLoss
+        totalProfitOrLoss += gainLossValue;
+    }
+
+    // Update the total profit/loss display
     document.getElementById('total-profit-loss').innerText = `Total Profit/Loss: $${totalProfitOrLoss.toFixed(2)}`;
 }
-
 document.getElementById('clear-portfolio').addEventListener('click', function () {
     document.getElementById('portfolio-table').getElementsByTagName('tbody')[0].innerHTML = '';
     totalProfitOrLoss = 0;
