@@ -1,4 +1,2 @@
 ﻿  main.cpp
-C:\Users\bobyan01\source\repos\Dir-Recon\dir-recon\Arm_Hackathon\task_one\dir-recon\includes.h(25,16): warning C4091: 'typedef ': ignored on left of 'CD_ITEM' when no variable is declared
-C:\Users\bobyan01\source\repos\Dir-Recon\dir-recon\Arm_Hackathon\task_one\dir-recon\includes.h(31,16): warning C4091: 'typedef ': ignored on left of 'FILE_DETAIL' when no variable is declared
   dir-recon.vcxproj -> C:\Users\bobyan01\source\repos\Dir-Recon\dir-recon\Arm_Hackathon\task_one\x64\Debug\dir-recon.exe

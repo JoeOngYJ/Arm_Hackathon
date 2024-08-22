@@ -1,11 +1,11 @@
 #include "includes.h"
+#define _CRT_SECURE_NO_WARNINGS
 
-std::string enumLines(std::string line, std::string currPath);
-const char* combine(const char* str1, const char* str2);
+void remove_newlines(char* str);
+void append_string(char** str, const char* addition);
 
-CD_ITEM checkCd(char* line);
-
-void removeNewline(std::string& str);
+char* combineStrings(const char* str1, const char* str2);
+CD_ITEM checkCd(const char* line);
 
 int main() 
 {
@@ -13,20 +13,18 @@ int main()
 	std::cout << "starting..." << std::endl;
 	std::vector<std::string> data;
 	getFileContent2(&data);
-	char* currPath;
+	char* currPath = NULL;
 
-	for (size_t i = 0; i < data.size(); i++)
+	for (int i = 0; i < data.size(); i++)
 	{
-		std::cout << data[i] << std::endl;
 		CD_ITEM result = checkCd(data[i].c_str());
 		if (result.isCd)
-		{	
-			currPath = combine(currPath, result.dir);
+		{
+			std::cout << data[i] << std::endl;
+			append_string(&currPath, result.dir);
+			std::cout << "current path: " << currPath << std::endl << std::endl;
 		}
-		std::cout << "current path: \n" << new_path << std::endl;
 	}
-
-
 	std::cin.get(); //DELETE
 }
 
@@ -40,23 +38,39 @@ CD_ITEM checkCd(const char* line)
 	{
 		result.isCd = true;
 		result.dir = line + prefixLength;
+		//std::cout << "cd: " << result.dir << std::endl;
 	}
 	return result;
 }
 
-void removeNewline(std::string& str) 
+char* combineStrings(const char* str1, const char* str2) 
 {
-	if (!str.empty() && str.back() == '\n') {
-		str.erase(str.size() - 1);
-	}
+	size_t length = strlen(str1) + strlen(str2) + 1;
+	char* combined = new char[length];
+	strcpy_s(combined, length, str1);
+	strcat_s(combined, length, str2);
+	return combined;
 }
-
-const char* combine(const char* str1, const char* str2) 
+void remove_newlines(char* str) 
 {
-	size_t len1 = std::strlen(str1);
-	size_t len2 = std::strlen(str2);
-	char* result = new char[len1 + len2 + 1];
-	std::strcpy(result, str1);
-	std::strcat(result, str2);
-	return result;
+	char* src = str;
+	char* dst = str;
+
+	while (*src != '\0') {
+		if (*src != '\n') {
+			*dst = *src;
+			dst++;
+		}
+		src++;
+	}
+	*dst = '\0';
+}
+void append_string(char** str, const char* addition) 
+{
+	size_t len = *str ? strlen(*str) : 0;
+	size_t addition_len = strlen(addition);
+	*str = (char*)realloc(*str, len + addition_len + 1);
+	if (*str == NULL)
+		return;
+	strcpy_s(*str + len, addition_len + 1, addition);
 }
